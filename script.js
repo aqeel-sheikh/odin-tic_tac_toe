@@ -91,10 +91,10 @@ function gameController() {
   };
   const playRound = () => {
     let currentBoard = board.getBoard();
-    let rounds = 0;
-    while (!checkWinner(currentBoard) || rounds < 9) {
+    let results = checkWinner(currentBoard);
+    while (!results) {
       const cell = prompt(`Your Move ${getActivePlayer().name}!`);
-
+      
       if (cell > currentBoard.length - 1) {
         console.log("Invalid cell");
         return;
@@ -103,16 +103,17 @@ function gameController() {
         console.log("Cell already taken");
         return;
       }
-
+      
       currentBoard[cell].setValue(getActivePlayer().token);
-      if (checkWinner(currentBoard)) {
+      results = checkWinner(currentBoard); // Update board after every move
+      
+      if (results) {
         board.printBoard();
-        console.log(checkWinner(currentBoard));
+        console.log(results);
         return;
       }
       switchPlayerTurn();
       printNewRound();
-      rounds++;
     }
   };
   printNewRound();
