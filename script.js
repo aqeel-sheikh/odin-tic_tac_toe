@@ -89,41 +89,32 @@ function gameController() {
 
     return;
   };
-  const playRound = (cell) => {
-    const currentBoard = board.getBoard();
+  const playRound = () => {
+    let currentBoard = board.getBoard();
+    let rounds = 0;
+    while (!checkWinner(currentBoard) || rounds < 9) {
+      const cell = prompt(`Your Move ${getActivePlayer().name}!`);
 
-    if (cell > currentBoard.length - 1) {
-      console.log("Invalid cell");
-      return;
+      if (cell > currentBoard.length - 1) {
+        console.log("Invalid cell");
+        return;
+      }
+      if (currentBoard[cell].getValue() !== null) {
+        console.log("Cell already taken");
+        return;
+      }
+
+      currentBoard[cell].setValue(getActivePlayer().token);
+      if (checkWinner(currentBoard)) {
+        board.printBoard();
+        console.log(checkWinner(currentBoard));
+        return;
+      }
+      switchPlayerTurn();
+      printNewRound();
+      rounds++;
     }
-    if (currentBoard[cell].getValue() !== null) {
-      console.log("Cell already taken");
-      return;
-    }
-    
-    currentBoard[cell].setValue(getActivePlayer().token);
-    if (checkWinner(currentBoard)) {
-      board.printBoard();
-      console.log(checkWinner(currentBoard));
-      return;
-    }
-    switchPlayerTurn();
-    printNewRound()
   };
-
   printNewRound();
-
-  return {
-    playRound,
-  };
+  playRound();
 }
-const game = gameController();
-// game.playRound(0);
-// game.playRound(1);
-// game.playRound(5);
-// game.playRound(3);
-// game.playRound(4);
-// game.playRound(2);
-// game.playRound(7);
-// game.playRound(8);
-// game.playRound(6);
