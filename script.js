@@ -33,20 +33,19 @@ function gameBoard() {
     printBoard,
   };
 }
+const displayResult = document.querySelector(".result");
 
-function gameController() {
+function gameController(p1, p2) {
   const board = gameBoard();
-  const player1 = document.querySelector("#player1").value;
-  const player2 = document.querySelector("#player2").value;
 
   const players = [
     {
-      name: player1,
+      name: p1,
       token: "X",
       token_icon: "token-X.png",
     },
     {
-      name: player2,
+      name: p2,
       token: "O",
       token_icon: "token-O.png",
     },
@@ -79,34 +78,44 @@ function gameController() {
       if (pos1val !== null && pos1val === pos2val && pos2val === pos3val) {
         return `${getActivePlayer().name} Won.`;
       }
-
-      if (myBoard.every((cell) => cell.getValue() !== null)) {
-        return "Draw";
-      }
+    }
+    if (myBoard.every((cell) => cell.getValue() !== null)) {
+      return "Draw";
     }
   }
+
   function displayCurrentPlayer(div, player) {
     div.textContent = `${player.name}'s turn`;
   }
-  
+
   function playRound() {
     const currentBoard = board.getBoard();
     const cells = document.querySelectorAll(".cell");
     let gameOver = false;
-    
+
     cells.forEach((currentCell, index) => {
       currentCell.addEventListener("click", () => {
         if (gameOver) return;
         if (currentBoard[index].getValue() !== null) return;
-        
-        const displayResult = document.querySelector(".result");
+
         const activePlayer = getActivePlayer();
         displayResult.textContent = `${activePlayer.name}'s turn`;
         currentBoard[index].setValue(activePlayer.token);
 
         const img = document.createElement("img");
         img.src = activePlayer.token_icon;
-        currentCell.appendChild(img);
+        // Prevent image duplications
+        let imageExists = false;
+        const existingImage = currentCell.querySelectorAll("img");
+        for (let i = 0; i < existingImage.length; i++) {
+          if (existingImage[i].src === img.src) {
+            imageExists = true;
+            break;
+          }
+        }
+        if (!imageExists) {
+          currentCell.appendChild(img);
+        }
 
         let results = checkWinner(currentBoard);
         board.printBoard();
@@ -121,6 +130,19 @@ function gameController() {
       });
     });
   }
-playRound()
+  playRound();
 }
-gameController()
+
+document.addEventListener("DOMContentLoaded", () => {
+  const startBtn = document.querySelector("#start-btn");
+  startBtn.addEventListener("click", () => {
+    const player1 = document.querySelector("#player1").value;
+    const player2 = document.querySelector("#player2").value;
+    if (player1 && player2) {
+      displayResult.textContent = `${player1}'s turn`;
+      gameController(player1, player2);
+    } else {
+      displayResult.textContent = "Please choose player name(s)";
+    }
+  });
+});
