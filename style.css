@@ -9,6 +9,8 @@
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  background: #333;
+  color: aliceblue;
 }
 
 img, picture, video, canvas, svg {
@@ -34,4 +36,23 @@ h1, h2, h3, h4, h5, h6 {
 
 #root, #__next {
   isolation: isolate;
+}
+.board{
+  width: 350px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  gap: 10px;
+}
+.cell{
+  width: 100px;
+  height: 100px;
+  background-color: rgb(194, 194, 16);
+  border-radius: 10px;
+}
+.cell:hover{
+  transform: scale(0.9);
+}
+.token-img{
+  width: 80px;
 }

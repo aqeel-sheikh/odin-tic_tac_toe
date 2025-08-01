@@ -1,6 +1,7 @@
 function gameBoard() {
-  const board = [];
-  for (let i = 0; i < 9; i++) {
+  let board = [];
+  const totalCells = 9;
+  for (let i = 0; i < totalCells; i++) {
     board[i] = Cell();
   }
 
@@ -20,14 +21,13 @@ function gameBoard() {
 
   function printBoard() {
     for (let i = 0; i < 3; i++) {
-      let rows = board
-        .slice(i * 3, i * 3 + 3)
+      let grid = board
         .map((cell) => cell.getValue() || "_")
+        .slice(i * 3, i * 3 + 3)
         .join("|");
-      console.log(rows);
+      console.log(grid);
     }
   }
-
   return {
     getBoard,
     printBoard,
@@ -35,32 +35,27 @@ function gameBoard() {
 }
 
 function gameController() {
-  playerOneName = "Player 1";
-  playerTwoName = "Player 2";
   const board = gameBoard();
+  const player1 = document.querySelector("#player1").value;
+  const player2 = document.querySelector("#player2").value;
 
   const players = [
     {
-      name: playerOneName,
+      name: player1,
       token: "X",
     },
     {
-      name: playerTwoName,
+      name: player2,
       token: "O",
     },
   ];
 
   let activePlayer = players[0];
-
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
-  const getActivePlayer = () => activePlayer;
 
-  const printNewRound = () => {
-    board.printBoard();
-    console.log(`${getActivePlayer().name}'s turn.`);
-  };
+  const getActivePlayer = () => activePlayer;
 
   const winPatterns = [
     [0, 1, 2], // top row
@@ -72,50 +67,52 @@ function gameController() {
     [0, 4, 8], // diagonal top-left to bottom-right
     [2, 4, 6], // diagonal top-right to bottom-left
   ];
-  const checkWinner = (board) => {
+
+  function checkWinner(myBoard) {
     for (let pattern of winPatterns) {
-      const pos1val = board[pattern[0]].getValue();
-      const pos2val = board[pattern[1]].getValue();
-      const pos3val = board[pattern[2]].getValue();
+      const pos1val = myBoard[pattern[0]].getValue();
+      const pos2val = myBoard[pattern[1]].getValue();
+      const pos3val = myBoard[pattern[2]].getValue();
 
       if (pos1val !== null && pos1val === pos2val && pos2val === pos3val) {
-        return `${getActivePlayer().name} Won`;
+        return `${getActivePlayer().name} Won.`;
+      }
+
+      if (myBoard.every((cell) => cell.getValue() !== null)) {
+        return "Draw";
       }
     }
+  }
+  function displayCurrentPlayer(div, player) {
+    div.textContent = `${player.name}'s turn`;
+  }
+  function playRound() {
+    const currentBoard = board.getBoard();
+    const cells = document.querySelectorAll(".cell");
+    const displayResult = document.querySelector(".result");
+    let gameOver = false;
 
-    if (board.every((cell) => cell.getValue() !== null)) {
-      return "Draw";
-    }
+    cells.forEach((currentCell, index) => {
+      currentCell.addEventListener("click", () => {
+        if (gameOver) return;
+        if (currentBoard[index].getValue() !== null) return;
+        const activePlayer = getActivePlayer();
+        displayResult.textContent = `${activePlayer.name}'s turn`;
+        currentBoard[index].setValue(activePlayer.token);
+        currentCell.textContent = activePlayer.token;
 
-    return;
-  };
-  const playRound = () => {
-    let currentBoard = board.getBoard();
-    let results = checkWinner(currentBoard);
-    while (!results) {
-      const cell = prompt(`Your Move ${getActivePlayer().name}!`);
-      
-      if (cell > currentBoard.length - 1) {
-        console.log("Invalid cell");
-        return;
-      }
-      if (currentBoard[cell].getValue() !== null) {
-        console.log("Cell already taken");
-        return;
-      }
-      
-      currentBoard[cell].setValue(getActivePlayer().token);
-      results = checkWinner(currentBoard); // Update board after every move
-      
-      if (results) {
+        let results = checkWinner(currentBoard);
         board.printBoard();
-        console.log(results);
-        return;
-      }
-      switchPlayerTurn();
-      printNewRound();
-    }
-  };
-  printNewRound();
+
+        if (results) {
+          displayResult.textContent = results;
+          gameOver = true;
+          return;
+        }
+        switchPlayerTurn();
+        displayCurrentPlayer(displayResult, getActivePlayer());
+      });
+    });
+  }
   playRound();
 }
