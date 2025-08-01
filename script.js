@@ -43,10 +43,12 @@ function gameController() {
     {
       name: player1,
       token: "X",
+      token_icon: "token-X.png",
     },
     {
       name: player2,
       token: "O",
+      token_icon: "token-O.png",
     },
   ];
 
@@ -86,20 +88,25 @@ function gameController() {
   function displayCurrentPlayer(div, player) {
     div.textContent = `${player.name}'s turn`;
   }
+  
   function playRound() {
     const currentBoard = board.getBoard();
     const cells = document.querySelectorAll(".cell");
-    const displayResult = document.querySelector(".result");
     let gameOver = false;
-
+    
     cells.forEach((currentCell, index) => {
       currentCell.addEventListener("click", () => {
         if (gameOver) return;
         if (currentBoard[index].getValue() !== null) return;
+        
+        const displayResult = document.querySelector(".result");
         const activePlayer = getActivePlayer();
         displayResult.textContent = `${activePlayer.name}'s turn`;
         currentBoard[index].setValue(activePlayer.token);
-        currentCell.textContent = activePlayer.token;
+
+        const img = document.createElement("img");
+        img.src = activePlayer.token_icon;
+        currentCell.appendChild(img);
 
         let results = checkWinner(currentBoard);
         board.printBoard();
@@ -114,5 +121,6 @@ function gameController() {
       });
     });
   }
-  playRound();
+playRound()
 }
+gameController()
