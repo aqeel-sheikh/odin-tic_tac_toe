@@ -34,11 +34,13 @@ function gameBoard() {
   };
 }
 const displayResult = document.querySelector(".result");
+const startBtn = document.querySelector("#start-btn");
+const resetBtn = document.querySelector("#reset-btn");
 
 function gameController(p1, p2) {
-  const board = gameBoard();
+  let board = gameBoard();
 
-  const players = [
+  let players = [
     {
       name: p1,
       token: "X",
@@ -52,6 +54,7 @@ function gameController(p1, p2) {
   ];
 
   let activePlayer = players[0];
+
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
@@ -88,17 +91,18 @@ function gameController(p1, p2) {
     div.textContent = `${player.name}'s turn`;
   }
 
+  let gameOver = false;
+  const cells = document.querySelectorAll(".cell");
+
   function playRound() {
     const currentBoard = board.getBoard();
-    const cells = document.querySelectorAll(".cell");
-    let gameOver = false;
 
     cells.forEach((currentCell, index) => {
-      currentCell.addEventListener("click", () => {
+      currentCell.addEventListener("click", function play() {
         if (gameOver) return;
         if (currentBoard[index].getValue() !== null) return;
 
-        const activePlayer = getActivePlayer();
+        let activePlayer = getActivePlayer();
         displayResult.textContent = `${activePlayer.name}'s turn`;
         currentBoard[index].setValue(activePlayer.token);
 
@@ -130,10 +134,34 @@ function gameController(p1, p2) {
       });
     });
   }
+
+  resetBtn.addEventListener("click", reset);
+
+  function reset() {
+    const inputFields = document.querySelectorAll(".player");
+    startBtn.addEventListener("click", startGame);
+    displayResult.textContent = "";
+    clearUI(cells, inputFields);
+    activePlayer = players[0];
+    board = gameBoard();
+    gameOver = true;
+    resetBtn.removeEventListener("click", reset);
+  }
+  function clearUI(parentNode, inputField) {
+    parentNode.forEach((cell) => {
+      const img = cell.querySelector("img");
+      if (img) {
+        img.remove();
+      }
+    });
+    inputField.forEach((field) => {
+      if (field.value) {
+        field.value = "";
+      }
+    });
+  }
   playRound();
 }
-
-const startBtn = document.querySelector("#start-btn");
 
 function startGame() {
   const player1 = document.querySelector("#player1").value;
