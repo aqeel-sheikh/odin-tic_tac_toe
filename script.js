@@ -133,16 +133,17 @@ function gameController(p1, p2) {
   playRound();
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const startBtn = document.querySelector("#start-btn");
-  startBtn.addEventListener("click", () => {
-    const player1 = document.querySelector("#player1").value;
-    const player2 = document.querySelector("#player2").value;
-    if (player1 && player2) {
-      displayResult.textContent = `${player1}'s turn`;
-      gameController(player1, player2);
-    } else {
-      displayResult.textContent = "Please choose player name(s)";
-    }
-  });
-});
+const startBtn = document.querySelector("#start-btn");
+
+function startGame() {
+  const player1 = document.querySelector("#player1").value;
+  const player2 = document.querySelector("#player2").value;
+  if (player1 && player2) {
+    displayResult.textContent = `${player1}'s turn`;
+    gameController(player1, player2);
+    startBtn.removeEventListener("click", startGame);
+  } else {
+    displayResult.textContent = "Please choose player name(s)";
+  }
+}
+startBtn.addEventListener("click", startGame);
