@@ -51,13 +51,13 @@ function gameController(p1, p2) {
     {
       name: p1,
       token: "X",
-      token_icon: "token-X.png",
+      token_icon: "images/token-X.png",
       score: 0,
     },
     {
       name: p2,
       token: "O",
-      token_icon: "token-O.png",
+      token_icon: "images/token-O.png",
       score: 0,
     },
   ];
@@ -98,8 +98,7 @@ function gameController(p1, p2) {
         return `${getActivePlayer().name} Won.`;
       }
     }
-    // players[0].score = player1score;
-    // players[1].score = player2score;
+
     if (myBoard.every((cell) => cell.getValue() !== null)) {
       return "Draw";
     }
@@ -131,7 +130,11 @@ function gameController(p1, p2) {
     currentBoard[i].setValue(activePlayer.token);
 
     const img = document.createElement("img");
+    img.classList.add("token-img")
     img.src = activePlayer.token_icon;
+
+    if (activePlayer === players[0]) {
+    }
     // Prevent image duplications
     let imageExists = false;
     const existingImage = currentCell.querySelectorAll("img");
@@ -157,9 +160,26 @@ function gameController(p1, p2) {
       gameOver = true;
       return;
     }
+
     switchPlayerTurn();
     displayCurrentPlayer(displayResult, getActivePlayer());
   }
+  cells.forEach((currentCell) => {
+    currentCell.addEventListener("mouseover", () => {
+      if(getActivePlayer() === players[0]){
+        currentCell.style.cursor = "pointer"
+        currentCell.style.backgroundImage = "url('images/token-X.png')"
+        currentCell.classList.add("symbol")
+      }
+      else{
+        currentCell.style.backgroundImage = "url('images/token-O.png')"
+        currentCell.classList.add("symbol")
+      }
+    });
+    currentCell.addEventListener("mouseout", ()=>{
+      currentCell.style.backgroundImage = "none"
+    })
+  });
   function reset() {
     const inputFields = document.querySelectorAll(".player");
     startBtn.addEventListener("click", startGame);
@@ -176,7 +196,8 @@ function gameController(p1, p2) {
   function rematch() {
     board = gameBoard();
     clearCells(cells);
-    activePlayer = players[0];
+    switchPlayerTurn()
+    displayResult.textContent = `${getActivePlayer().name}'s turn`
     gameOver = false;
     cells.forEach((currentCell, index) => {
       currentCell.addEventListener("click", () => playGame(currentCell, index));
