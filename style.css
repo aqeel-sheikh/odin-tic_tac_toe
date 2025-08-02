@@ -190,9 +190,12 @@ h6 {
   place-self: start;
   padding: 3px;
 }
+#play-again-btn{
+  margin-right: 10px;
+}
 .scores {
   display: flex;
-  gap: 150px;
+  gap: 120px;
 }
 
 .player-info {
@@ -226,11 +229,11 @@ h6 {
   font-weight: 700;
   font-size: large;
   color: rgb(59, 49, 49);
+  margin-right: 15px;
 }
 .footer {
   position: absolute;
   bottom: 0;
-  left: 0;
   width: 100vw;
   padding: 5px 0;
   background-color: rgba(255, 255, 255, 0.1);
