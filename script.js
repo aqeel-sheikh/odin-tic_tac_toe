@@ -36,6 +36,7 @@ function gameBoard() {
 const displayResult = document.querySelector(".result");
 const startBtn = document.querySelector("#start-btn");
 const resetBtn = document.querySelector("#reset-btn");
+const rematchBtn = document.querySelector("#play-again-btn");
 
 function gameController(p1, p2) {
   let board = gameBoard();
@@ -136,30 +137,41 @@ function gameController(p1, p2) {
   }
 
   resetBtn.addEventListener("click", reset);
+  rematchBtn.addEventListener("click", rematch);
 
   function reset() {
     const inputFields = document.querySelectorAll(".player");
     startBtn.addEventListener("click", startGame);
     displayResult.textContent = "";
-    clearUI(cells, inputFields);
+    clearInputFields(inputFields);
+    clearCells(cells);
     activePlayer = players[0];
     board = gameBoard();
     gameOver = true;
     resetBtn.removeEventListener("click", reset);
   }
-  function clearUI(parentNode, inputField) {
+  function rematch() {
+    board = gameBoard();
+    clearCells(cells);
+    startGame();
+    rematchBtn.removeEventListener("click", rematch);
+  }
+  function clearCells(parentNode) {
     parentNode.forEach((cell) => {
       const img = cell.querySelector("img");
       if (img) {
         img.remove();
       }
     });
+  }
+  function clearInputFields(inputField) {
     inputField.forEach((field) => {
       if (field.value) {
         field.value = "";
       }
     });
   }
+
   playRound();
 }
 
