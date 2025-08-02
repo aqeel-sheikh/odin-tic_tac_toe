@@ -39,6 +39,10 @@ const resetBtn = document.querySelector("#reset-btn");
 const rematchBtn = document.querySelector("#play-again-btn");
 const playerSetup = document.querySelector(".player-setup");
 const gameContainer = document.querySelector(".game-container");
+const displayPlayer1Name = document.querySelector("#player1-name");
+const displayPlayer2Name = document.querySelector("#player2-name");
+const displayPlayer1score = document.querySelector("#player1-score");
+const displayPlayer2score = document.querySelector("#player2-score");
 
 function gameController(p1, p2) {
   let board = gameBoard();
@@ -48,11 +52,13 @@ function gameController(p1, p2) {
       name: p1,
       token: "X",
       token_icon: "token-X.png",
+      score: 0,
     },
     {
       name: p2,
       token: "O",
       token_icon: "token-O.png",
+      score: 0,
     },
   ];
 
@@ -74,6 +80,8 @@ function gameController(p1, p2) {
     [0, 4, 8], // diagonal top-left to bottom-right
     [2, 4, 6], // diagonal top-right to bottom-left
   ];
+  let player1score = players[0].score;
+  let player2score = players[1].score;
 
   function checkWinner(myBoard) {
     for (let pattern of winPatterns) {
@@ -82,9 +90,16 @@ function gameController(p1, p2) {
       const pos3val = myBoard[pattern[2]].getValue();
 
       if (pos1val !== null && pos1val === pos2val && pos2val === pos3val) {
+        if (getActivePlayer() === players[0]) {
+          player1score++;
+        } else {
+          player2score++;
+        }
         return `${getActivePlayer().name} Won.`;
       }
     }
+    // players[0].score = player1score;
+    // players[1].score = player2score;
     if (myBoard.every((cell) => cell.getValue() !== null)) {
       return "Draw";
     }
@@ -98,49 +113,53 @@ function gameController(p1, p2) {
   const cells = document.querySelectorAll(".cell");
 
   function playRound() {
-    const currentBoard = board.getBoard();
-
     cells.forEach((currentCell, index) => {
-      currentCell.addEventListener("click", function play() {
-        if (gameOver) return;
-        if (currentBoard[index].getValue() !== null) return;
-
-        let activePlayer = getActivePlayer();
-        displayResult.textContent = `${activePlayer.name}'s turn`;
-        currentBoard[index].setValue(activePlayer.token);
-
-        const img = document.createElement("img");
-        img.src = activePlayer.token_icon;
-        // Prevent image duplications
-        let imageExists = false;
-        const existingImage = currentCell.querySelectorAll("img");
-        for (let i = 0; i < existingImage.length; i++) {
-          if (existingImage[i].src === img.src) {
-            imageExists = true;
-            break;
-          }
-        }
-        if (!imageExists) {
-          currentCell.appendChild(img);
-        }
-
-        let results = checkWinner(currentBoard);
-        board.printBoard();
-
-        if (results) {
-          displayResult.textContent = results;
-          gameOver = true;
-          return;
-        }
-        switchPlayerTurn();
-        displayCurrentPlayer(displayResult, getActivePlayer());
-      });
+      currentCell.addEventListener("click", () => playGame(currentCell, index));
     });
   }
 
   resetBtn.addEventListener("click", reset);
   rematchBtn.addEventListener("click", rematch);
 
+  function playGame(currentCell, i) {
+    const currentBoard = board.getBoard();
+    if (gameOver) return;
+    if (currentBoard[i].getValue() !== null) return;
+
+    let activePlayer = getActivePlayer();
+    displayResult.textContent = `${activePlayer.name}'s turn`;
+    currentBoard[i].setValue(activePlayer.token);
+
+    const img = document.createElement("img");
+    img.src = activePlayer.token_icon;
+    // Prevent image duplications
+    let imageExists = false;
+    const existingImage = currentCell.querySelectorAll("img");
+    for (let i = 0; i < existingImage.length; i++) {
+      if (existingImage[i].src === img.src) {
+        imageExists = true;
+        break;
+      }
+    }
+    if (!imageExists) {
+      currentCell.appendChild(img);
+    }
+
+    let results = checkWinner(currentBoard);
+    board.printBoard();
+
+    if (results) {
+      displayResult.textContent = results;
+      displayPlayer1score.textContent = player1score;
+      displayPlayer2score.textContent = player2score;
+      console.log(player1score);
+      console.log(player2score);
+      gameOver = true;
+      return;
+    }
+    switchPlayerTurn();
+    displayCurrentPlayer(displayResult, getActivePlayer());
+  }
   function reset() {
     const inputFields = document.querySelectorAll(".player");
     startBtn.addEventListener("click", startGame);
@@ -157,10 +176,11 @@ function gameController(p1, p2) {
   function rematch() {
     board = gameBoard();
     clearCells(cells);
-    startGame();
-    toggleHideElements(playerSetup);
-    toggleHideElements(gameContainer);
-    rematchBtn.removeEventListener("click", rematch);
+    activePlayer = players[0];
+    gameOver = false;
+    cells.forEach((currentCell, index) => {
+      currentCell.addEventListener("click", () => playGame(currentCell, index));
+    });
   }
   function clearCells(parentNode) {
     parentNode.forEach((cell) => {
@@ -180,18 +200,21 @@ function gameController(p1, p2) {
 
   playRound();
 }
+const message = document.querySelector(".enter-name");
 
 function startGame() {
   const player1Name = document.querySelector("#player1").value;
   const player2Name = document.querySelector("#player2").value;
   if (player1Name && player2Name) {
     displayResult.textContent = `${player1Name}'s turn`;
+    displayPlayer1Name.textContent = player1Name + ":";
+    displayPlayer2Name.textContent = player2Name + ":";
     gameController(player1Name, player2Name);
     startBtn.removeEventListener("click", startGame);
     toggleHideElements(gameContainer);
     toggleHideElements(playerSetup);
   } else {
-    displayResult.textContent = "Please choose player name(s)";
+    message.textContent = "Please choose player name(s)";
   }
 }
 

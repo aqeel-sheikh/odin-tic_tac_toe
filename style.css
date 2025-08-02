@@ -141,3 +141,31 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(0) scale(0.98);
   box-shadow: none;
 }
+/* Game container */
+.game-container{
+  height: 90vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 20px 60px 50px 1fr 1fr;
+  place-items: center;
+  padding: 10px;
+}
+#reset-btn{
+  width: fit-content;
+  place-self: start;
+  padding: 3px;
+}
+.scores{
+  display: flex;
+  height: 50px;
+  gap: 150px;
+  padding: 20px;
+}
+.score{
+  /* height: fit-content; */
+  padding: 5px;
+  width: 70px;
+}
+.player-info{
+  display: flex;
+}

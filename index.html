@@ -9,6 +9,7 @@
   <body>
     <div class="player-setup">
       <img class="logo" src="images/background02.png" alt="Game Logo" />
+      <div class="enter-name"></div>
 
       <input
         class="player"
@@ -31,14 +32,25 @@
       <button class="btn" id="start-btn">Play</button>
     </div>
 
-    <div class="result"></div>
     <div class="game-container">
-      <div class="btns">
-        <div><button class="btn" id="reset-btn">Start Over</button></div>
-        <div>
-          <button class="btn" id="play-again-btn">One More Round</button>
+      <button class="btn" id="reset-btn">Start Over</button>
+      <div class="scores">
+        <div class="score">
+          <div>X</div>
+          <div class="player-info">
+            <p id="player1-name"></p>
+            <p id="player1-score"></p>
+          </div>
+        </div>
+        <div class="score">
+          <div>O</div>
+          <div class="player-info">
+            <p id="player2-name"></p>
+            <p id="player2-score"></p>
+          </div>
         </div>
       </div>
+      <div class="result"><strong>Result</strong></div>
       <div class="board">
         <div class="cell"></div>
         <div class="cell"></div>
@@ -50,7 +62,9 @@
         <div class="cell"></div>
         <div class="cell"></div>
       </div>
+      <button class="btn" id="play-again-btn">One More Round</button>
     </div>
+
     <script src="script.js"></script>
   </body>
 </html>
