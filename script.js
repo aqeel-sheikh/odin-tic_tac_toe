@@ -37,6 +37,8 @@ const displayResult = document.querySelector(".result");
 const startBtn = document.querySelector("#start-btn");
 const resetBtn = document.querySelector("#reset-btn");
 const rematchBtn = document.querySelector("#play-again-btn");
+const playerSetup = document.querySelector(".player-setup");
+const gameContainer = document.querySelector(".game-container");
 
 function gameController(p1, p2) {
   let board = gameBoard();
@@ -149,11 +151,15 @@ function gameController(p1, p2) {
     board = gameBoard();
     gameOver = true;
     resetBtn.removeEventListener("click", reset);
+    toggleHideElements(gameContainer);
+    toggleHideElements(playerSetup);
   }
   function rematch() {
     board = gameBoard();
     clearCells(cells);
     startGame();
+    toggleHideElements(playerSetup);
+    toggleHideElements(gameContainer);
     rematchBtn.removeEventListener("click", rematch);
   }
   function clearCells(parentNode) {
@@ -182,9 +188,19 @@ function startGame() {
     displayResult.textContent = `${player1Name}'s turn`;
     gameController(player1Name, player2Name);
     startBtn.removeEventListener("click", startGame);
+    toggleHideElements(gameContainer);
+    toggleHideElements(playerSetup);
   } else {
     displayResult.textContent = "Please choose player name(s)";
   }
 }
 
 startBtn.addEventListener("click", startGame);
+
+document.addEventListener("DOMContentLoaded", () =>
+  toggleHideElements(gameContainer)
+);
+
+function toggleHideElements(container) {
+  container.classList.toggle("hidden");
+}

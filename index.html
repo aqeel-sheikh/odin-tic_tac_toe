@@ -7,38 +7,49 @@
     <title>Tic Tac Toe</title>
   </head>
   <body>
-    <label for="player1">
-      Player 1:
+    <div class="player-setup">
+      <img class="logo" src="images/background02.png" alt="Game Logo" />
+
       <input
         class="player"
         id="player1"
         type="text"
-        placeholder="You will get 'X' & 1st turn"
+        placeholder="Player Name - X"
+        required
       />
-    </label>
-    <label for="player2">
-      Player 2:
+
+      <p>VS</p>
+
       <input
         class="player"
         id="player2"
         type="text"
-        placeholder="You will get 'O' & 2nd turn"
+        placeholder="Player Name - O"
+        required
       />
-    </label>
-    <div><button class="btn" id="start-btn">Play</button></div>
-    <div><button class="btn" id="reset-btn">Start Over</button></div>
-    <div><button class="btn" id="play-again-btn">One More Round</button></div>
+
+      <button class="btn" id="start-btn">Play</button>
+    </div>
+
     <div class="result"></div>
-    <div class="board">
-      <div class="cell"></div>
-      <div class="cell"></div>
-      <div class="cell"></div>
-      <div class="cell"></div>
-      <div class="cell"></div>
-      <div class="cell"></div>
-      <div class="cell"></div>
-      <div class="cell"></div>
-      <div class="cell"></div>
+    <div class="game-container">
+      <div class="btns">
+        <div><button class="btn" id="reset-btn">Start Over</button></div>
+        <div>
+          <button class="btn" id="play-again-btn">One More Round</button>
+        </div>
+      </div>
+      <div class="board">
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+      </div>
     </div>
     <script src="script.js"></script>
   </body>

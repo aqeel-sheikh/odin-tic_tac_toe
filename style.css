@@ -1,3 +1,9 @@
+@font-face {
+    font-family: 'roboto';
+    src: url('fonts/roboto.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -9,8 +15,13 @@
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  background: #333;
+  /* background: url(images/background2.jpg);
+  background-position: center;
+  min-height: 100vh;
+  background-position-y: 20px; */
+  background-color: #0099f7;
   color: aliceblue;
+  font-family: roboto;
 }
 
 img, picture, video, canvas, svg {
@@ -37,6 +48,9 @@ h1, h2, h3, h4, h5, h6 {
 #root, #__next {
   isolation: isolate;
 }
+.hidden{
+  display: none !important;
+}
 .board{
   width: 350px;
   display: flex;
@@ -48,11 +62,82 @@ h1, h2, h3, h4, h5, h6 {
   width: 100px;
   height: 100px;
   background-color: rgb(194, 194, 16);
-  border-radius: 10px;
+  border-radius: 10px;  
+  border-right: 2px solid white;
 }
 .cell:hover{
   transform: scale(0.9);
 }
 .token-img{
   width: 80px;
+}
+/* Input fields */
+.player-setup {
+  perspective: 1000px;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.player-setup p {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #ffffffcc;
+}
+
+.player {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  width: 220px;
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease, outline 0.2s;
+  outline: none;
+  color: #0099f7;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+}
+
+.player:hover {
+  transform: rotateY(3deg) rotateX(3deg) translateZ(10px);
+  outline: 2px solid #00c6ff;
+}
+
+.player:valid {
+  outline: none;
+  background-color: #ffffff;
+}
+
+.logo {
+  width: 200px;
+  filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.4));
+}
+
+/*  Buttons */
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, #009de0, #005fc0);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: none;
 }
