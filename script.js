@@ -164,14 +164,15 @@ function gameController(p1, p2) {
 }
 
 function startGame() {
-  const player1 = document.querySelector("#player1").value;
-  const player2 = document.querySelector("#player2").value;
-  if (player1 && player2) {
-    displayResult.textContent = `${player1}'s turn`;
-    gameController(player1, player2);
+  const player1Name = document.querySelector("#player1").value;
+  const player2Name = document.querySelector("#player2").value;
+  if (player1Name && player2Name) {
+    displayResult.textContent = `${player1Name}'s turn`;
+    gameController(player1Name, player2Name);
     startBtn.removeEventListener("click", startGame);
   } else {
     displayResult.textContent = "Please choose player name(s)";
   }
 }
+
 startBtn.addEventListener("click", startGame);
